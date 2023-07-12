@@ -1,0 +1,199 @@
+What are exceptions:
+
+Exceptions in PHP are a way to handle errors or exceptional conditions that occur during the execution of a program. When an exceptional condition arises, an exception object is created and "thrown" to interrupt the normal flow of the program and transfer control to an appropriate exception handler.
+
+Exceptions are objects that represent different types of errors or exceptional situations. They can contain information about the error, such as an error message, error code, stack trace, and any additional data relevant to the error. By using exceptions, you can separate the code that detects errors from the code that handles them, making your code more maintainable and easier to debug.
+
+In PHP, exceptions are typically thrown using the throw keyword followed by an instance of an exception class. Here's an example:
+
+function divide($numerator, $denominator) {
+    if ($denominator === 0) {
+        throw new Exception("Cannot divide by zero.");
+    }
+
+    return $numerator / $denominator;
+}
+
+try {
+    $result = divide(10, 0);
+    echo "Result: " . $result;
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+
+In this example, the divide() function checks if the denominator is zero. If it is, it throws a new Exception with the error message "Cannot divide by zero." The throw statement immediately transfers control to the nearest catch block.
+
+The catch block catches the thrown exception and handles it. It takes an exception object as a parameter, which can be used to retrieve information about the exception, such as the error message. In this case, we simply echo the error message.
+
+By using exceptions, you can gracefully handle errors in your code, provide meaningful error messages to users or developers, and control the flow of your program when exceptional conditions occur.
+
+
+
+/////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+In addition to the built-in exceptions provided by PHP, you can also create your own custom exceptions to represent specific types of errors or exceptional conditions in your code. Custom exceptions can be helpful in providing more specific information about the error and implementing custom error handling logic.
+
+To create a custom exception, you need to define a new class that extends the base `Exception` class or any other built-in exception class. Your custom exception class can have its own properties, methods, and constructor to provide additional context or functionality.
+
+Here's an example of creating a custom exception class in PHP:
+
+```php
+class CustomException extends Exception {
+    // Optional: Define additional properties or methods specific to your exception
+
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        // Call the parent constructor to set the error message and code
+        parent::__construct($message, $code, $previous);
+    }
+
+    // Optional: Define additional methods specific to your exception
+}
+```
+
+In this example, we create a custom exception class `CustomException` that extends the base `Exception` class. We provide a constructor to set the error message and code using the parent constructor. You can add additional properties or methods as needed for your specific use case.
+
+To throw a custom exception, you can use the `throw` statement and pass an instance of your custom exception class:
+
+```php
+function doSomething() {
+    throw new CustomException("Something went wrong.");
+}
+
+try {
+    doSomething();
+} catch (CustomException $e) {
+    echo "Custom Exception: " . $e->getMessage();
+}
+```
+
+In this example, the `doSomething()` function throws a `CustomException` with the error message "Something went wrong." The `catch` block specifically catches the `CustomException` and handles it accordingly.
+
+Custom exceptions provide flexibility and control in handling different types of errors or exceptional conditions in your code. By defining your own exception classes, you can tailor the exception handling logic to your specific application requirements.
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+In PHP, you can catch and handle exceptions using the `try` and `catch` blocks. The `try` block contains the code that may potentially throw an exception, and the `catch` block is used to handle and process the thrown exception.
+
+Here's the basic syntax of a try-catch block in PHP:
+
+```php
+try {
+    // Code that may throw an exception
+} catch (ExceptionType $exception) {
+    // Code to handle the exception
+}
+```
+
+In the `try` block, you write the code that you anticipate may throw an exception. If an exception is thrown within the `try` block, PHP will immediately stop executing the remaining code within the block and jump to the appropriate `catch` block based on the type of exception.
+
+The `catch` block specifies the type of exception you want to catch (e.g., `Exception`, `RuntimeException`, or a custom exception class). When an exception of that type is thrown, PHP will transfer control to the corresponding `catch` block. You can then handle the exception by executing code within the `catch` block.
+
+Here's an example that demonstrates the use of try-catch blocks:
+
+```php
+function divide($numerator, $denominator) {
+    try {
+        if ($denominator === 0) {
+            throw new Exception('Division by zero is not allowed.');
+        }
+
+        $result = $numerator / $denominator;
+        echo "Result: $result";
+    } catch (Exception $e) {
+        echo 'An error occurred: ' . $e->getMessage();
+    }
+}
+
+divide(10, 2); // Result: 5
+divide(10, 0); // An error occurred: Division by zero is not allowed.
+```
+
+In this example, the `divide()` function attempts to divide the numerator by the denominator. If the denominator is zero, an exception of type `Exception` is thrown with a specific error message. The exception is then caught in the `catch` block, where an error message is displayed.
+
+By using try-catch blocks, you can gracefully handle exceptions and implement appropriate error handling logic in your code. It allows you to separate the code that may throw exceptions from the code that handles them, improving the overall robustness and reliability of your application.
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+In PHP, the `finally` block is used to specify code that should be executed regardless of whether an exception is thrown or not. It is typically placed after all `catch` blocks in a `try-catch` structure.
+
+The `finally` block will always be executed, regardless of whether an exception occurred or if it was caught and handled. It allows you to perform cleanup tasks or execute code that should always run, regardless of the outcome of the `try` and `catch` blocks.
+
+Here's an example to illustrate the usage of the `finally` block:
+
+```php
+function divide($numerator, $denominator) {
+    try {
+        if ($denominator === 0) {
+            throw new Exception('Division by zero is not allowed.');
+        }
+
+        $result = $numerator / $denominator;
+        return $result;
+    } catch (Exception $e) {
+        echo 'An error occurred: ' . $e->getMessage();
+    } finally {
+        echo 'Finally block executed.';
+    }
+}
+
+echo divide(10, 2); // Output: 5 Finally block executed.
+echo divide(10, 0); // Output: An error occurred: Division by zero is not allowed. Finally block executed.
+```
+
+In this example, the `divide()` function attempts to divide the `numerator` by the `denominator`. If the `denominator` is zero, an exception is thrown, and the error message is displayed in the `catch` block. The `finally` block is executed regardless of whether an exception occurred or not.
+
+Regarding the `return` statements within `try`, `catch`, and `finally` blocks:
+
+- If a `return` statement is encountered in the `try` block, the code within the `finally` block will still be executed before the function returns.
+
+- If a `return` statement is encountered in the `catch` block, the code within the `finally` block will still be executed before the function returns.
+
+- If a `return` statement is encountered in the `finally` block, it will override any previous `return` statements in the `try` or `catch` blocks, and the value specified in the `finally` block will be returned.
+
+It's important to note that the `finally` block should not contain any code that may throw an exception, as it may interfere with the exception handling mechanism.
+
+//////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+In PHP, you can set up a global exception handler to handle uncaught exceptions that occur during the execution of your code. This allows you to centrally manage and handle exceptions without the need to catch them at every occurrence.
+
+To set up a global exception handler, you can use the `set_exception_handler()` function, which accepts a callback function that will be invoked whenever an exception is not caught by a `try-catch` block. Here's an example:
+
+```php
+function exceptionHandler($exception) {
+    // Handle the exception
+    echo 'An error occurred: ' . $exception->getMessage();
+}
+
+set_exception_handler('exceptionHandler');
+
+// Example code that throws an exception
+throw new Exception('Something went wrong.');
+```
+
+In this example, the `exceptionHandler()` function is defined as the global exception handler. It receives the exception object as its argument and can perform any necessary actions to handle the exception. In this case, it simply echoes the error message.
+
+PHP has a built-in hierarchy of exception classes that you can use to catch specific types of exceptions or create custom exception classes. The base class for exceptions is `Exception`, and you can create custom exception classes by extending this class or any of its subclasses. This allows you to organize and handle exceptions based on their types or categories.
+
+In terms of error reporting, PHP 7 and PHP 8 introduced changes to error reporting and error handling mechanisms. Some notable changes include:
+
+1. Throwable Interface: In PHP 7, the `Throwable` interface was introduced as the base interface for both exceptions and errors. This allows you to catch and handle both exceptions and errors using the same catch block.
+
+2. Error Hierarchy: PHP 7 introduced an error hierarchy by introducing several error classes that extend the `Throwable` interface. These include `Error`, `TypeError`, `ParseError`, `FatalError`, and more. This allows for more granular error handling and specific catch blocks for different types of errors.
+
+3. Error Reporting Level: PHP 7 also introduced changes to the error reporting level. By default, PHP 7 uses the `E_ALL` error reporting level, which includes all types of errors and warnings. This provides better visibility into potential issues during development. However, it's recommended to adjust the error reporting level based on the specific needs of your application and production environment.
+
+In PHP 8, some additional changes were introduced to error handling and reporting, including the addition of the `throw` expression, the ability to use the nullsafe operator (`?->`), and improvements to error messages and error handling mechanisms.
+
+Overall, these changes aim to improve error handling, provide more structured error reporting, and enhance the overall reliability and robustness of PHP applications.
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
